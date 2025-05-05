@@ -55,7 +55,7 @@ def bottom(U_bd, aux_bd, theta):
     return U_bd_ghost, aux_bd_ghost
 
 def up(U_bd, aux_bd, theta):
-    U_bd = U_bd/theta['AR'][0:1,:,0:3]  
+    U_bd = U_bd/theta['AR'][0:1,:,-3:]  
     Pb = theta['Pb']
     state_out = U_bd[:,:,-1:]
     gamma_out = aux_bd[0:1,:,-1:]
