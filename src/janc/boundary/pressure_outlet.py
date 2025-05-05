@@ -62,7 +62,7 @@ def up(U_bd, aux_bd, theta):
     T_out = aux_bd[1:2,:,-1:]
     normal_vel = state_out[2:3,:,:]/state_out[0:1,:,:]
     U_bd,aux_bd = pressure_outlet(state_out, gamma_out, T_out, normal_vel,Pb)  
-    U_bd = U_bd*theta['AR'][0:1,:,-1:1]
+    U_bd = U_bd*theta['AR'][0:1,:,-1:]
     U_bd_ghost = jnp.concatenate([U_bd[:,:,0:1],U_bd[:,:,0:1],U_bd[:,:,0:1]],axis=2)
     aux_bd_ghost = jnp.concatenate([aux_bd[:,:,0:1],aux_bd[:,:,0:1],aux_bd[:,:,0:1]],axis=2)
     return U_bd_ghost, aux_bd_ghost
