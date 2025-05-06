@@ -87,8 +87,9 @@ def set_solver(thermo_set, boundary_set, source_set = None, nondim_set = None, s
             
             return field
     
-    def advance_source_term(field,dt):
-        U, aux = field[0:-2],field[-2:]
+    def advance_source_term(field,dt,theta):
+        U = field[0:-2]/theta['AR'][0:1]
+        aux = field[-2:]
         aux = aux_func.update_aux(U, aux)
         _,T = aux_func.aux_to_thermo(U,aux)
         rho = U[0:1]
@@ -96,8 +97,9 @@ def set_solver(thermo_set, boundary_set, source_set = None, nondim_set = None, s
         drhoY = chemical.solve_implicit_rate(T,rho,Y,dt)
 
         p1 = U[0:4,:,:]
-        p2 = U[4:,:,:] + drhoY
+        p2 = U[4:,:,:] + theta['Rec']*drhoY
         U_new = jnp.concatenate([p1,p2],axis=0)
+        U_new = U_new*theta['AR'][0:1]
         return jnp.concatenate([U_new,aux],axis=0)
 
     
@@ -121,7 +123,7 @@ def set_solver(thermo_set, boundary_set, source_set = None, nondim_set = None, s
                 @jit    
                 def advance_one_step(field,dx,dy,dt,theta=None):
                     field_adv = advance_flux(field,dx,dy,dt,theta)
-                    field = advance_source_term(field_adv,dt)
+                    field = advance_source_term(field_adv,dt,theta)
                     return field
     else:
         if solver_mode == 'amr':
