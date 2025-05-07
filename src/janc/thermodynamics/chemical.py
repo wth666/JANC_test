@@ -71,7 +71,7 @@ def construct_matrix_equation(T,X,dt):
 @jit
 def solve_implicit_rate(T,rho,Y,dt):
     Y = thermo.fill_Y(Y)
-    print(Y.shape)
+    #print(Y.shape)
     rhoY = rho*Y
     X = rhoY/(thermo.Mex)
     A, b = construct_matrix_equation(T,X,dt)
