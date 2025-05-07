@@ -71,10 +71,12 @@ def construct_matrix_equation(T,X,dt):
 @jit
 def solve_implicit_rate(T,rho,Y,dt):
     Y = thermo.fill_Y(Y)
+    print(Y.shape)
     rhoY = rho*Y
     X = rhoY/(thermo.Mex)
     A, b = construct_matrix_equation(T,X,dt)
     drhoY = jnp.linalg.solve(A,b)
+    print(drhoY.shape)
     drhoY = jnp.transpose(drhoY[:,:,:,0],(2,0,1))
     print(drhoY.shape)
     dY = drhoY/rho
