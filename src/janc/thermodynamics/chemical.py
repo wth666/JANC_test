@@ -60,12 +60,12 @@ def construct_matrix_equation(T,X,dt):
     matrix_fcn = vmap(vmap(reaction_rate_with_derievative,in_axes=(None,None,None,0)),in_axes=(None,None,0,None))
     k = jnp.arange(thermo.n)
     n = jnp.arange(thermo.n)
-    print(n)
+    print(thermo.n)
+    print(n.shape)
     w_k, dwk_drhonYn = matrix_fcn(T,X,k,n)
     S = jnp.transpose(w_k[:,0:1,:,:],(2,3,0,1))
     DSDU = jnp.transpose(dwk_drhonYn,(2,3,0,1))
     I = jnp.eye(thermo.n)
-    print(I)
     A = I/dt - DSDU
     b = S
     return A, b
